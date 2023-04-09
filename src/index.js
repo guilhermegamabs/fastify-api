@@ -33,6 +33,24 @@ app.get('/products/:id', (req, reply) => {
   );
 });
 
+app.put('/products/:id', (req, reply) => {
+  app.mysql.query(
+    `UPDATE products SET product_name = '${req.body.name}', product_price = '${req.body.price}' WHERE (id = ${Number(req.params.id)})`,
+    function onResult(err, result) {
+      reply.send(err || result);
+    }
+  );
+});
+
+app.delete('/products/:id', (req, reply) => {
+  app.mysql.query(
+    `DELETE FROM products WHERE (id = ${req.params.id})`,
+    function onResult(err, result) {
+      reply.send(err || result);
+    }
+  );
+});
+
 app.listen({ port: 3333 }, (err, address) => {
   if (err) {
     console.log(err);
