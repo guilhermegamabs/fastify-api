@@ -1,3 +1,4 @@
+const fastify = require('fastify');
 const Fastify = require('fastify');
 const app = Fastify();
 
@@ -6,7 +7,21 @@ app.register(require('@fastify/mysql'), {
 });
 
 app.get('/products', (req, reply) => {
-  reply.send({ hello: 'World!'});
+  app.mysql.query(
+    "SELECT id, product_name, product_price FROM products",
+    function onResult(err, result) {
+      reply.send(err || result);
+    }
+  );
+});
+
+app.post('/products/:name/:price', (req, reply) => {
+  app.mysql.query(
+    `INSERT INTO products (product_name, product_price) VALUES ('${req.params.name}', ${req.params.price})`,
+    function onResult(err, result) {
+      reply.send(err || result);
+    }
+  );
 });
 
 app.listen({ port: 3333 }, (err, address) => {
