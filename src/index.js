@@ -24,6 +24,15 @@ app.post('/products/:name/:price', (req, reply) => {
   );
 });
 
+app.get('/products/:id', (req, reply) => {
+  app.mysql.query(
+    `SELECT id, product_name, product_price FROM products WHERE (id = ${Number(req.params.id)})`,
+    function onResult(err, result) {
+      reply.send(err || result);
+    }
+  );
+});
+
 app.listen({ port: 3333 }, (err, address) => {
   if (err) {
     console.log(err);
