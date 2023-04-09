@@ -1,10 +1,13 @@
 const Fastify = require('fastify');
 const app = Fastify();
 
+app.register(require('@fastify/mysql'), {
+  connectionString: 'mysql://root:1290@localhost:3306/fastifynode'
+});
+
 app.get('/products', (req, reply) => {
   reply.send({ hello: 'World!'});
 });
-
 
 app.listen({ port: 3333 }, (err, address) => {
   if (err) {
